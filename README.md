@@ -98,6 +98,12 @@ Eğitim boyunca 5 değerlendirme adımı boyunca (5 x 250 = 1250 adım) iyileşm
 | 1250 | 1.14 | 0.4378 | 30.63% |
 | 1500 | 1.36 | 0.4016 | 28.40% |
 
+> [!NOTE]
+> **Neden 125. Adım Değil de 250. Adım En İyisi (Best Checkpoint)?**
+> * **Eğitim Kaybı (Training Loss):** Her 25 adımda bir (25, 50, 75, 100, 125...) eğitim kümesindeki verilerle hesaplanır. 125. adımda eğitim kaybı en düşük seviyelerden birine (`0.1176`) ulaşmıştır.
+> * **Değerlendirme (Evaluation / WER):** Modelin gerçek başarısını gösteren test kaybı ve **WER (Kelime Hata Oranı)** değerleri ise yalnızca **250 adımda bir** (`eval_steps=250`) test kümesi üzerinde hesaplanır (250, 500, 750, 1000...).
+> * 125. adımda bir test/değerlendirme (evaluation) yapılmadığı için o adımda WER skoru bulunmamaktadır. Değerlendirme yapılan tüm adımlar arasında en iyi (en düşük) kelime hata oranı ve test kaybı **250. adımda (%17.71 WER ve 0.2190 Eval Loss)** alınmıştır. Bu nedenle Hugging Face Trainer, en iyi model olarak **checkpoint-250**'yi seçmiş ve kaydetmiştir.
+
 <details>
 <summary><b>🔍 Detaylı Eğitim Adımları (Her 25 Adımda Bir Kaydedilen Training Loss) - Tıklayıp Açınız</b></summary>
 
