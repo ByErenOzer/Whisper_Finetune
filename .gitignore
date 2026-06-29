@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+model/
+data/
+output/
+best_model/
+best_model_lora*/
+output_lora*/
+tmp_train_shards/
+tmp_test_shards/
+experiment_results.json
+transcription_comparison.txt
+.ipynb_checkpoints/
+.DS_Store
