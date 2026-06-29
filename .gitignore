@@ -1,3 +1,4 @@
+# Ignored folders and cache
 __pycache__/
 *.pyc
 model/
@@ -8,7 +9,26 @@ best_model_lora*/
 output_lora*/
 tmp_train_shards/
 tmp_test_shards/
-experiment_results.json
-transcription_comparison.txt
 .ipynb_checkpoints/
 .DS_Store
+
+# Training result files and logs
+experiment_results.json
+transcription_comparison.txt
+all_results.json
+dataset_dict.json
+dataset_info.json
+state.json
+train_results.json
+trainer_state.json
+
+# Local scripts not needed on Git (as per user request)
+finetune.py
+finetune_multi_mig.py
+run_train.sh
+download_model.py
+compare_models.py
+
+# Large media assets
+whisperv3.mp4
+whisperv3.wav

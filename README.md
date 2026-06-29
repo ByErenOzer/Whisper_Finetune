@@ -79,37 +79,27 @@ Eğitim scripti, en iyi performans gösteren hiperparametre kombinasyonunu bulma
 
 Her deney sonunda elde edilen en iyi model ağırlıkları `best_model_lora_<deney_adi>/` dizinine kaydedilir.
 
-### 💡 Gelişmiş Eğitim Optimizasyonları
-* **Multi-MIG Desteği:** `CUDA_VISIBLE_DEVICES` ortam değişkeniyle Nvidia MIG (Multi-Instance GPU - örn. 4x 20GB) cihazlarını otomatik olarak tanımlar ve yönetir.
-* **Early Stopping:** WER (Word Error Rate) değeri 5 değerlendirme adımı boyunca (5 x 250 = 1250 adım) iyileşmezse eğitimi otomatik olarak sonlandırır.
-* **Gradient Checkpointing:** Bellek tasarrufu sağlamak için etkinleştirilmiştir (`use_reentrant=False`).
-* **Anti-Halüsinasyon Ayarları:** Whisper modellerinde sık karşılaşılan tekrarlama ve halüsinasyonları engellemek için `no_repeat_ngram_size=5` ve `condition_on_prev_tokens=False` ayarları uygulanmıştır.
+---
 
-### 📈 Çalıştırma ve Karşılaştırma
-Eğitimleri başlatmak için:
-```bash
-python finetune_lora.py
-```
-Tüm deneyler tamamlandığında konsola aşağıdaki gibi detaylı bir **karşılaştırma tablosu** basılır ve en iyi performansı (en düşük WER%) veren deney şampiyon seçilir:
+## 📈 Eğitim ve Değerlendirme Sonuçları (WER)
 
-```text
-================================================================================
-                    3 DENEY KARŞILAŞTIRMA TABLOSU
-================================================================================
-Deney                  LR         Scheduler  Best WER%    Best Step    Train Loss   Süre (dk) 
---------------------------------------------------------------------------------
-lr1e-4_linear          1e-04      linear     x.xx         250          x.xxxx       xx.x      
-lr1e-5_linear          1e-05      linear     y.yy         500          y.yyyy       yy.y      
-lr1e-4_cosine          1e-04      cosine     z.zz         250          z.zzzz       zz.z      
---------------------------------------------------------------------------------
+Model eğitimi sırasında yapılan değerlendirme adımlarında elde edilen **WER (Word Error Rate)** ve **Kayıp (Loss)** değerleri aşağıdaki tabloda verilmiştir.
 
-🏆 EN İYİ DENEY: lr1e-4_linear
-   WER: x.xx% (step 250)
-   Model: best_model_lora_lr1e-4_linear
-================================================================================
-```
+Eğitim boyunca 5 değerlendirme adımı boyunca (5 x 250 = 1250 adım) iyileşme gözlenmediği için Erken Durdurma (Early Stopping) tetiklenmiş ve eğitim 1500. adımda sonlandırılmıştır. En iyi model ağırlıkları **250. adımda** elde edilmiştir.
 
-Ayrıca eğitimlerin anlık kaybı (loss) ve WER gelişimleri **Tensorboard** ile `report_to=["tensorboard"]` parametresi sayesinde görselleştirilebilir.
+| Değerlendirme Adımı (Step) | Eğitim Epoch | Değerlendirme Kaybı (Eval Loss) | Kelime Hata Oranı (Eval WER %) |
+| :--- | :--- | :--- | :--- |
+| **250 (En İyi Checkpoint)** | 0.23 | **0.2190** | **17.71%** |
+| 500 | 0.45 | 0.4162 | 29.59% |
+| 750 | 0.68 | 0.4230 | 31.26% |
+| 1000 | 0.91 | 0.4102 | 30.36% |
+| 1250 | 1.14 | 0.4378 | 30.63% |
+| 1500 | 1.36 | 0.4016 | 28.40% |
+
+### Eğitim İstatistikleri Özeti:
+* **Toplam Eğitim Kaybı (Train Loss):** 0.2448
+* **Eğitim Süresi:** ~7.95 saat (28,624 saniye)
+* **Saniyedeki Eğitim Örneği Sayısı:** 12.276
 
 ---
 
